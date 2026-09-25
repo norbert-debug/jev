@@ -1,0 +1,22 @@
+{
+  "name": "jev_evaluate",
+  "description": "Evaluate a state with versioned TypeSafe Jev Choice, Score and Noul questions and return structured judgments for routing.",
+  "input": {
+    "state": "string | object | string[]",
+    "questions": "object",
+    "model": "optional string; default jev-latest"
+  },
+  "output": {
+    "model": "resolved model id",
+    "answers": "typed answer map",
+    "usage": "provider usage metadata when available",
+    "receipt": {
+      "question_set_version": "string",
+      "state_schema_version": "string",
+      "policy_version": "string"
+    }
+  },
+  "secrets": {
+    "TYPESAFE_API_KEY": "server-side only; never a tool argument"
+  }
+}
