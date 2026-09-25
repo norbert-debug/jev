@@ -1,0 +1,101 @@
+version: "0.1"
+model_alias: "jev-latest"
+
+principles:
+  - atomic_questions_only
+  - deterministic_math_in_code
+  - explicit_unknown_options
+  - minimize_state_fields
+  - confidence_gated_routing
+  - calibrate_on_labelled_data
+
+domains:
+  project_artifact:
+    state_fields:
+      - title
+      - short_text
+      - source_type
+      - project_hint
+    questions:
+      artifact_type:
+        type: choice
+        instructions: "What role does this artifact primarily play in the project?"
+        criteria:
+          fact: "A claim presented as established information."
+          decision: "A choice that has been made and should guide future work."
+          hypothesis: "A proposition that still needs evidence or testing."
+          source: "A pointer to external evidence or a data source."
+          task: "Work that still needs to be performed."
+          result: "An observed outcome of completed work."
+          risk: "A problem, uncertainty or downside that may affect the project."
+          other: "None of the listed categories clearly applies."
+      deep_reasoning_warranted:
+        type: noul
+        instructions: "This item contains enough relevant novelty, ambiguity, conflict, or potential value that a deeper reasoning-model analysis is warranted."
+      likely_stale_or_superseded:
+        type: noul
+        instructions: "The text appears to describe a state, decision, plan, or assumption that may have been superseded by newer project information."
+
+  linkedin_connection:
+    state_fields:
+      - position
+      - company
+      - connected_for
+      - name_suffixes
+    questions:
+      seniority:
+        type: choice
+        instructions: "Based only on the supplied position text, what is this person's seniority?"
+        criteria:
+          owner_or_c_level: "Owner, founder with operating responsibility, CEO, COO, CFO, CMO, CTO or equivalent."
+          vp_or_director: "Vice president, director, head of function or equivalent."
+          manager: "Manager or team lead below director/head level."
+          individual_contributor: "Specialist, consultant, engineer, analyst or other individual contributor."
+          junior_or_student: "Intern, student, trainee or clearly junior role."
+          unknown: "Position is missing, vague, conflicting, or not sufficient to tell."
+      target_decision_maker:
+        type: noul
+        instructions: "The supplied position text indicates a person likely to influence or approve a material B2B purchase or partnership."
+
+  atlas_source:
+    state_fields:
+      - title
+      - description
+      - publisher
+      - access_notes
+    questions:
+      b2b_signal_potential:
+        type: score
+        instructions: "How much potential does this source appear to have for revealing commercially useful B2B problems, opportunities or market signals?"
+        criteria:
+          - "Little or no plausible commercial signal."
+          - "Some indirect or niche potential."
+          - "Clear potential for useful business signals."
+          - "Strong and repeatable potential for a data product or commercial workflow."
+      evidence_directness:
+        type: score
+        instructions: "How directly would this source support a business claim rather than merely suggesting one?"
+        criteria:
+          - "Mostly commentary, promotion, or weak inference."
+          - "Some factual support but material interpretation is required."
+          - "Direct structured or primary evidence."
+
+  gods_eye_segment:
+    state_fields:
+      - feature_summary
+      - deterministic_metrics_summary
+      - proposed_label
+    questions:
+      label_supported:
+        type: noul
+        instructions: "The proposed segment label is supported by the supplied features without requiring hidden assumptions."
+      commercial_interpretability:
+        type: score
+        instructions: "How easily could a media buyer understand what this segment means and why it could matter?"
+        criteria:
+          - "Hard to interpret or too abstract."
+          - "Understandable with explanation."
+          - "Clear, specific and commercially interpretable."
+      overclaim_risk:
+        type: noul
+        instructions: "The proposed label or interpretation claims more about people than the supplied aggregate/features reasonably support."
